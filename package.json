@@ -1,14 +1,15 @@
 {
-  "name": "sf-intra-city-skill",
-  "version": "1.2.0",
-  "description": "顺丰同城急送 CLI —— 同城寄件的询价、下单、支付、查单、取消（零第三方依赖）",
+  "name": "sftc-open-cli",
+  "version": "1.0.0",
+  "description": "顺丰同城开放平台 CLI 工具 —— 同城寄件的询价、下单、支付、查单、取消",
   "bin": {
-    "sf-clite": "scripts/clite.js"
+    "sftc-open-cli": "scripts/clite.js"
   },
   "engines": {
     "node": ">=16"
   },
   "files": [
+    "README.md",
     "SKILL.md",
     "scripts/clite.js",
     "package.json"
