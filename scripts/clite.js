@@ -37,7 +37,7 @@ const { execFileSync } = require('child_process');
 //    端点与渠道号属于「服务接入信息」，不是凭据，可随包分发。
 //    真正的凭据（用户 token）只存在本机 Keychain / 本地文件，不进分发包。
 const DEFAULT_ENDPOINT = 'https://bottc.sf-express.com/clite/mcp';
-const CLI_VERSION = '1.2.0';
+const CLI_VERSION = '1.0.0';
 const DEFAULT_CHANNEL = '3001589';
 const RESOURCE_METADATA_URL = 'https://bottc.sf-express.com/.well-known/oauth-protected-resource';
 const FALLBACK_AS_METADATA_URL = 'https://bottc.sf-express.com/.well-known/oauth-authorization-server';
@@ -1344,7 +1344,7 @@ async function actSkill(a) {
 async function actVersion() {
   emit({
     ok: true,
-    name: 'sf-intra-city-skill',
+    name: 'sftc-open-cli',
     version: CLI_VERSION,
     runtime: `node ${process.version}`,
     platform: process.platform,
@@ -1399,22 +1399,22 @@ function parseArgv(argv) {
 }
 
 function usage() {
-  const lines = ['顺丰同城急送（业务动作层，自包含，无需任何 MCP 配置）', '', '用法: clite.js <命令> [选项]', '', '命令:'];
+  const lines = ['顺丰同城急送（业务动作层，自包含，无需任何 MCP 配置）', '', '用法: sftc-open-cli <命令> [选项]', '', '命令:'];
   for (const [name, spec] of Object.entries(COMMANDS)) {
     lines.push(`  ${name.padEnd(9)} ${spec.help}`);
   }
   lines.push('', '示例:');
-  lines.push('  clite.js config');
-  lines.push('  clite.js login                         # 打开浏览器完成授权');
-  lines.push('  clite.js login --print-url             # 只输出授权链接（无浏览器环境）');
-  lines.push('  clite.js login --redirect-url "<回调URL>"  # 用粘贴的回调地址完成');
-  lines.push('  clite.js addr --side sender --keyword "北京市朝阳区望京SOHO"');
-  lines.push('  clite.js quote --from-addr-json \'<寄件方>\' --to-addr-json \'<收件方>\' \\');
+  lines.push('  sftc-open-cli config');
+  lines.push('  sftc-open-cli login                         # 打开浏览器完成授权');
+  lines.push('  sftc-open-cli login --print-url             # 只输出授权链接（无浏览器环境）');
+  lines.push('  sftc-open-cli login --redirect-url "<回调URL>"  # 用粘贴的回调地址完成');
+  lines.push('  sftc-open-cli addr --side sender --keyword "北京市朝阳区望京SOHO"');
+  lines.push('  sftc-open-cli quote --from-addr-json \'<寄件方>\' --to-addr-json \'<收件方>\' \\');
   lines.push('                 --product-type 12 --product-name 文件 --product-weight 1');
-  lines.push('  clite.js place --preview-file <quote返回的路径> --yes');
-  lines.push('  clite.js pay --order-id X --method WX');
-  lines.push('  clite.js reasons --order-id X');
-  lines.push('  clite.js cancel --order-id X');
+  lines.push('  sftc-open-cli place --preview-file <quote返回的路径> --yes');
+  lines.push('  sftc-open-cli pay --order-id X --method WX');
+  lines.push('  sftc-open-cli reasons --order-id X');
+  lines.push('  sftc-open-cli cancel --order-id X');
   lines.push('');
   lines.push('环境变量（用于无浏览器 / CI / 容器）:');
   lines.push('  CLITE_TOKEN    仅注入 access token，跳过浏览器授权');
@@ -1445,4 +1445,3 @@ async function main() {
 main().catch((e) => {
   fail('[MCP_ERROR]', `未预期的错误：${e && e.message ? e.message : String(e)}`, EXIT_ERROR);
 });
-
