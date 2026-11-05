@@ -2,7 +2,7 @@
 
 顺丰同城开放平台 CLI 工具 —— 为人和 AI 智能体提供同城即时配送能力。
 
-> 安装后的命令行程序名为 `sf-clite`。
+> 包名与命令行程序名均为 `sftc-open-cli`。
 
 ## 功能
 
@@ -38,7 +38,7 @@ curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/download/v1.0.0/sftc
 npm i -g sftc-open-cli-1.0.0.tgz
 ```
 
-安装完成后即可使用 `sf-clite` 命令。
+安装完成后即可使用 `sftc-open-cli` 命令。
 
 ### 方式二：从 npm registry 安装
 
@@ -51,7 +51,7 @@ npm i -g sftc-open-cli
 ### 验证安装
 
 ```bash
-sf-clite version
+sftc-open-cli version
 ```
 
 ```json
@@ -62,50 +62,50 @@ sf-clite version
 
 ```bash
 # 查看版本
-sf-clite version
+sftc-open-cli version
 
 # 列出所有命令
-sf-clite --help
+sftc-open-cli --help
 
 # 授权登录（首次使用）
-sf-clite login
+sftc-open-cli login
 
 # 查看授权状态
-sf-clite whoami
+sftc-open-cli whoami
 
 # 查询已开通城市
-sf-clite cities
+sftc-open-cli cities
 
 # 解析地址（寄件方 / 收件方各一次）
-sf-clite addr --side sender   --keyword "北京市海淀区奥北科技园东区国泰大厦"
-sf-clite addr --side receiver --keyword "北京市海淀区安宁庄东路7号"
+sftc-open-cli addr --side sender   --keyword "北京市海淀区奥北科技园东区国泰大厦"
+sftc-open-cli addr --side receiver --keyword "北京市海淀区安宁庄东路7号"
 
 # 查询物品类型与重量规则
-sf-clite options
+sftc-open-cli options
 
 # 询价（不产生订单）
-sf-clite quote \
+sftc-open-cli quote \
   --from-addr-json '{"name":"张三","phone":"13800138000","lat":"40.032412","lng":"116.377333","cityId":111000000,"cityName":"北京市","street":"海淀区奥北科技园东区","building":"国泰大厦"}' \
   --to-addr-json   '{"name":"李四","phone":"13900139000","lat":"40.045488","lng":"116.327914","cityId":111000000,"cityName":"北京市","street":"海淀区安宁庄东路7号","building":"融科融智蜂巢工场"}' \
   --product-type 12 --product-name "商务文件" --product-weight 1
 
 # 确认后创建订单
-sf-clite place --preview-file ~/.sf-intra-city-skill/quote-latest.json --yes
+sftc-open-cli place --preview-file ~/.sf-intra-city-skill/quote-latest.json --yes
 
 # 获取支付方式（不代表已支付）
-sf-clite pay --order-id "8344485710485" --method WX
+sftc-open-cli pay --order-id "8344485710485" --method WX
 
 # 查询订单
-sf-clite show --order-id "8344485710485"
+sftc-open-cli show --order-id "8344485710485"
 
 # 查询取消费用
-sf-clite reasons --order-id "8344485710485"
+sftc-open-cli reasons --order-id "8344485710485"
 
 # 取消订单
-sf-clite cancel --order-id "8344485710485" --yes
+sftc-open-cli cancel --order-id "8344485710485" --yes
 
 # 查看本机发单记录
-sf-clite orders
+sftc-open-cli orders
 ```
 
 ### 两条硬性规则
@@ -130,7 +130,7 @@ sf-clite orders
 | 36 | 证照 | 1kg |
 | 99 | 其他 | 1kg |
 
-> 重量单位为**千克（整数，上限 50kg）**。「不到一公斤」传 `1`，不要传 `1000`。完整列表以 `sf-clite options` 返回为准。
+> 重量单位为**千克（整数，上限 50kg）**。「不到一公斤」传 `1`，不要传 `1000`。完整列表以 `sftc-open-cli options` 返回为准。
 
 ## AI 智能体集成
 
@@ -140,13 +140,13 @@ sf-clite orders
 
 ```bash
 # 安装到 Claude Code 用户级 skills 目录（默认 ~/.claude/skills）
-sf-clite skill install
+sftc-open-cli skill install
 
 # 安装到指定目录（项目级或其他客户端）
-sf-clite skill install --root <目录>
+sftc-open-cli skill install --root <目录>
 
 # 卸载
-sf-clite skill uninstall
+sftc-open-cli skill uninstall
 ```
 
 安装完成后**重启客户端会话**，即可在对话中使用「顺丰同城急送」技能。
@@ -172,7 +172,7 @@ sf-clite skill uninstall
 ### 交互式授权
 
 ```bash
-sf-clite login
+sftc-open-cli login
 ```
 
 浏览器弹出后使用顺丰账号授权，凭证自动保存，后续命令免登录。
@@ -181,10 +181,10 @@ sf-clite login
 
 ```bash
 # 只输出授权链接
-sf-clite login --print-url
+sftc-open-cli login --print-url
 
 # 用户在任意设备完成登录后，粘贴完整回调 URL
-sf-clite login --redirect-url "http://localhost:xxxxx/?code=..."
+sftc-open-cli login --redirect-url "http://localhost:xxxxx/?code=..."
 ```
 
 ### 环境变量（CI / 容器）
@@ -196,7 +196,7 @@ sf-clite login --redirect-url "http://localhost:xxxxx/?code=..."
 
 ```bash
 export CLITE_SESSION='{"access_token":"...","refresh_token":"...","token_endpoint":"...","client_id":"..."}'
-sf-clite whoami
+sftc-open-cli whoami
 ```
 
 > 环境变量只影响本次进程，不会回写本机凭证。`CLITE_SESSION` 含 refresh token，请通过 CI secret 注入，禁止打印到日志。
@@ -224,10 +224,10 @@ sf-clite whoami
 | `3` | 未登录 / 无权限 |
 
 ```bash
-if ! out=$(sf-clite quote "$@"); then
+if ! out=$(sftc-open-cli quote "$@"); then
   code=$(echo "$out" | jq -r '.code')
   case "$code" in
-    "[AUTH_REQUIRED]") sf-clite login && exec "$0" "$@" ;;
+    "[AUTH_REQUIRED]") sftc-open-cli login && exec "$0" "$@" ;;
     *) echo "失败: $code"; exit 1 ;;
   esac
 fi
@@ -240,14 +240,14 @@ CLI 通过重新安装升级，配置与登录态不受影响：
 ```bash
 curl -LO https://github.com/<org>/<repo>/releases/latest/download/sftc-open-cli-<版本>.tgz
 npm i -g sftc-open-cli-<版本>.tgz
-sf-clite skill install      # 同步更新技能副本
+sftc-open-cli skill install      # 同步更新技能副本
 ```
 
 ## 卸载
 
 ```bash
 # 1. 卸载技能副本
-sf-clite skill uninstall
+sftc-open-cli skill uninstall
 
 # 2. 卸载 CLI
 npm uninstall -g sftc-open-cli
