@@ -32,10 +32,10 @@
 
 ```bash
 # 1. 下载安装包（链接以正式发布地址为准）
-curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/download/v1.2.0/sftc-open-cli-1.2.0.tgz
+curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/download/v1.0.0/sftc-open-cli-1.0.0.tgz
 
 # 2. 全局安装
-npm i -g sftc-open-cli-1.2.0.tgz
+npm i -g sftc-open-cli-1.0.0.tgz
 ```
 
 安装完成后即可使用 `sf-clite` 命令。
@@ -55,7 +55,7 @@ sf-clite version
 ```
 
 ```json
-{"ok":true,"name":"sftc-open-cli","version":"1.2.0","runtime":"node v23.10.0","platform":"darwin","api":"MCP 2025-06-18"}
+{"ok":true,"name":"sftc-open-cli","version":"1.0.0","runtime":"node v23.10.0","platform":"darwin","api":"MCP 2025-06-18"}
 ```
 
 ## 使用
