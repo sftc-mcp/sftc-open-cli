@@ -32,7 +32,7 @@
 
 ```bash
 # 1. 下载安装包（链接以正式发布地址为准）
-curl -LO https://github.com/<org>/<repo>/releases/download/v1.2.0/sftc-open-cli-1.2.0.tgz
+curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/download/v1.2.0/sftc-open-cli-1.2.0.tgz
 
 # 2. 全局安装
 npm i -g sftc-open-cli-1.2.0.tgz
