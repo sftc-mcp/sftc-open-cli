@@ -42,7 +42,7 @@ npm i -g sftc-open-cli-1.0.0.tgz
 
 ### 方式二：从 npm registry 安装
 
-发布到 registry 后可直接安装：
+可直接安装：
 
 ```bash
 npm i -g sftc-open-cli
