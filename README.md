@@ -32,10 +32,10 @@
 
 ```bash
 # 1. 下载安装包（链接以正式发布地址为准）
-curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/download/v1.0.0/sftc-open-cli-1.0.0.tgz
+curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/latest/download/sftc-open-cli.tgz
 
 # 2. 全局安装
-npm i -g sftc-open-cli-1.0.0.tgz
+npm i -g sftc-open-cli.tgz
 ```
 
 安装完成后即可使用 `sftc-open-cli` 命令。
@@ -55,7 +55,7 @@ sftc-open-cli version
 ```
 
 ```json
-{"ok":true,"name":"sftc-open-cli","version":"1.0.0","runtime":"node v23.10.0","platform":"darwin","api":"MCP 2025-06-18"}
+{"ok":true,"name":"sftc-open-cli","version":"1.0.1","runtime":"node v23.10.0","platform":"darwin","api":"MCP 2025-06-18"}
 ```
 
 ## 使用
@@ -259,8 +259,8 @@ fi
 CLI 通过重新安装升级，配置与登录态不受影响：
 
 ```bash
-curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/latest/download/sftc-open-cli-<版本>.tgz
-npm i -g sftc-open-cli-<版本>.tgz
+curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/latest/download/sftc-open-cli.tgz
+npm i -g sftc-open-cli.tgz
 sftc-open-cli skill install      # 同步更新技能副本
 ```
 
