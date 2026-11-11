@@ -1,0 +1,6 @@
+# dsh 组合包补丁：安装本包后，dsh 会把下面这一行并入 profile 的插件树。
+# 行 id 必须全局唯一；name 是本包的包名，指向 package.json 的 exports["."]。
+- insert:
+    - id: sftc-open-cli
+      name: 'sftc-open-cli'
+      config: {}

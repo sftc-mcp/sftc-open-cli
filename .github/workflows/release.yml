@@ -1,60 +1,93 @@
 name: Release
 
-  on:
-    push:
-      tags: ['v*']
-    workflow_dispatch:
-  
-  permissions:
-    contents: write
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
 
-  jobs:
-    release:
-      runs-on: ubuntu-latest
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      steps:
-        - uses: actions/checkout@v4
+permissions:
+  contents: write
 
-        - uses: actions/setup-node@v4
-          with:
-            node-version: 20
-            registry-url: https://registry.npmjs.org/
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-        - name: 校验 tag 与 package.json 版本一致
-          run: |
-            PKG=$(node -p "require('./package.json').version")
-            TAG=${GITHUB_REF_NAME#v}
-            echo "package=$PKG tag=$TAG"
-            [ "$PKG" = "$TAG" ] || { echo "::error::package.json 版本与 tag 不一致"; exit 1; }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
 
-        - name: 打 npm 包
-          run: npm pack
+      - name: 计算版本与 tag
+        id: meta
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            TAG="$GITHUB_REF_NAME"
+          else
+            TAG="v$VERSION"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION, tag=$TAG"
 
-        - name: 打技能 zip
-          run: |
-            mkdir -p staging/sf-intra-city-skill
-            cp -r README.md SKILL.md package.json scripts staging/sf-intra-city-skill/
-            (cd staging && zip -r -X ../sf-intra-city-skill.zip sf-intra-city-skill)
+      - name: 校验 tag 与 package.json 版本一致
+        run: |
+          EXPECTED="v${{ steps.meta.outputs.version }}"
+          ACTUAL="${{ steps.meta.outputs.tag }}"
+          if [ "$EXPECTED" != "$ACTUAL" ]; then
+            echo "::error::package.json 版本($EXPECTED) 与 tag($ACTUAL) 不一致"
+            exit 1
+          fi
 
-        - name: 生成校验值
-          run: |
-            shasum -a 256 sftc-open-cli-*.tgz sf-intra-city-skill.zip > checksums.txt
-            cat checksums.txt
-  
-        - name: 创建 GitHub Release
-          run: |
-            gh release create "$GITHUB_REF_NAME" \
+      - name: 打 npm 包
+        run: npm pack
+
+      - name: 打技能 zip
+        run: |
+          mkdir -p staging/sf-intra-city-skill
+          for f in README.md SKILL.md package.json scripts dsh locale icon.svg cordis.patch.yml; do
+            if [ -e "$f" ]; then
+              cp -r "$f" staging/sf-intra-city-skill/
+            fi
+          done
+          (cd staging && zip -r -X ../sf-intra-city-skill.zip sf-intra-city-skill)
+          unzip -l sf-intra-city-skill.zip
+
+      - name: 生成校验值
+        run: |
+          shasum -a 256 sftc-open-cli-*.tgz sf-intra-city-skill.zip | tee checksums.txt
+
+      - name: 创建或更新 GitHub Release
+        run: |
+          TAG="${{ steps.meta.outputs.tag }}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG 已存在，覆盖上传资产"
+            gh release upload "$TAG" sftc-open-cli-*.tgz sf-intra-city-skill.zip checksums.txt --clobber
+          else
+            gh release create "$TAG" \
               sftc-open-cli-*.tgz \
               sf-intra-city-skill.zip \
               checksums.txt \
-              --title "$GITHUB_REF_NAME" \
+              --title "$TAG" \
               --generate-notes
-          env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: 发布到 npm（配了 NPM_TOKEN 才执行）
-          if: env.NPM_TOKEN != ''
-          run: npm publish --access public
-          env:
-            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 发布到 npm（配了 NPM_TOKEN 且版本未发布时执行）
+        if: env.NPM_TOKEN != ''
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          if npm view "sftc-open-cli@$VERSION" version >/dev/null 2>&1; then
+            echo "npm 上已存在 $VERSION，跳过发布"
+          else
+            npm publish --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

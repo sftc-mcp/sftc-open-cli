@@ -42,7 +42,7 @@ npm i -g sftc-open-cli-1.0.0.tgz
 
 ### 方式二：从 npm registry 安装
 
-可直接安装：
+发布到 registry 后可直接安装：
 
 ```bash
 npm i -g sftc-open-cli
@@ -165,7 +165,28 @@ sftc-open-cli skill uninstall
 | 客户端 | 状态 |
 |---|---|
 | Claude Code | 已验证（用户级 / 项目级 skills 目录） |
+| DeepSeek Harness（dsh） | 通过内置 dsh bundle 安装，见下节 |
 | Cursor 及其他支持 skills 的客户端 | 通过 `--root` 指定其 skills 目录；具体位置以客户端文档为准 |
+
+### DSH 插件安装
+
+本包已内置 dsh bundle 清单，dsh 的插件管理器可直接安装，**装完技能自动注册**，无需再执行 `skill install`：
+
+```bash
+# 在 dsh 插件管理里填包名
+sftc-open-cli
+
+# 或本地目录（开发期，dsh 会 link 而不是复制）
+/path/to/sftc-open-cli
+```
+
+安装后：
+
+- 插件列表显示「顺丰同城急送」及中英文描述、图标
+- 新会话的技能目录出现 `sf-intra-city-skill`
+- 模型按 `SKILL.md` 调用包内的 `scripts/clite.js`
+
+> dsh 默认文件沙箱为 workspace-write，CLI 写入 `~/.sf-intra-city-skill` 可能被拦。可通过环境变量把数据目录指到工作区内：`SFTC_DATA_DIR=<工作区路径>`。
 
 ## 认证与配置
 
@@ -238,7 +259,7 @@ fi
 CLI 通过重新安装升级，配置与登录态不受影响：
 
 ```bash
-curl -LO https://github.com/<org>/<repo>/releases/latest/download/sftc-open-cli-<版本>.tgz
+curl -LO https://github.com/sftc-mcp/sftc-open-cli/releases/latest/download/sftc-open-cli-<版本>.tgz
 npm i -g sftc-open-cli-<版本>.tgz
 sftc-open-cli skill install      # 同步更新技能副本
 ```

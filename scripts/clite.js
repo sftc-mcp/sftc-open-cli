@@ -37,14 +37,16 @@ const { execFileSync } = require('child_process');
 //    端点与渠道号属于「服务接入信息」，不是凭据，可随包分发。
 //    真正的凭据（用户 token）只存在本机 Keychain / 本地文件，不进分发包。
 const DEFAULT_ENDPOINT = 'https://bottc.sf-express.com/clite/mcp';
-const CLI_VERSION = '1.0.0';
+const CLI_VERSION = '1.0.1';
 const DEFAULT_CHANNEL = '3001589';
 const RESOURCE_METADATA_URL = 'https://bottc.sf-express.com/.well-known/oauth-protected-resource';
 const FALLBACK_AS_METADATA_URL = 'https://bottc.sf-express.com/.well-known/oauth-authorization-server';
 
 const KEYCHAIN_SERVICE = 'clite-mcp-session';
 const KEYCHAIN_ACCOUNT = 'session';
-const DATA_DIR = path.join(os.homedir(), '.sf-intra-city-skill');
+const DATA_DIR = process.env.SFTC_DATA_DIR
+  ? path.resolve(process.env.SFTC_DATA_DIR)
+  : path.join(os.homedir(), '.sf-intra-city-skill');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const SESSION_FILE = path.join(DATA_DIR, 'session.json');
 const PENDING_FILE = path.join(DATA_DIR, 'oauth-pending.json');

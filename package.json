@@ -1,9 +1,20 @@
 {
   "name": "sftc-open-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "顺丰同城开放平台 CLI 工具 —— 同城寄件的询价、下单、支付、查单、取消",
   "bin": {
     "sftc-open-cli": "scripts/clite.js"
+  },
+  "exports": {
+    ".": "./dsh/index.mjs",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
   },
   "engines": {
     "node": ">=16"
@@ -12,6 +23,10 @@
     "README.md",
     "SKILL.md",
     "scripts/clite.js",
+    "dsh/index.mjs",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
     "package.json"
   ],
   "keywords": [
@@ -19,8 +34,17 @@
     "intra-city",
     "delivery",
     "cli",
-    "mcp"
+    "mcp",
+    "dsh",
+    "dsh-bundle"
   ],
   "license": "UNLICENSED",
-  "private": true
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sftc-mcp/sftc-open-cli.git"
+  },
+  "homepage": "https://github.com/sftc-mcp/sftc-open-cli#readme",
+  "bugs": {
+    "url": "https://github.com/sftc-mcp/sftc-open-cli/issues"
+  }
 }
