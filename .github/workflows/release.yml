@@ -45,8 +45,12 @@ jobs:
             exit 1
           fi
 
-      - name: 打 npm 包
-        run: npm pack
+      - name: 打 npm 包并生成稳定文件名副本
+        run: |
+          npm pack
+          # 固定文件名副本，配合 releases/latest/download 使用，README 里的链接无需随版本更新
+          cp sftc-open-cli-*.tgz sftc-open-cli.tgz
+          ls -l sftc-open-cli*.tgz
 
       - name: 打技能 zip
         run: |
@@ -61,17 +65,18 @@ jobs:
 
       - name: 生成校验值
         run: |
-          shasum -a 256 sftc-open-cli-*.tgz sf-intra-city-skill.zip | tee checksums.txt
+          shasum -a 256 sftc-open-cli-*.tgz sftc-open-cli.tgz sf-intra-city-skill.zip | tee checksums.txt
 
       - name: 创建或更新 GitHub Release
         run: |
           TAG="${{ steps.meta.outputs.tag }}"
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "Release $TAG 已存在，覆盖上传资产"
-            gh release upload "$TAG" sftc-open-cli-*.tgz sf-intra-city-skill.zip checksums.txt --clobber
+            gh release upload "$TAG" sftc-open-cli-*.tgz sftc-open-cli.tgz sf-intra-city-skill.zip checksums.txt --clobber
           else
             gh release create "$TAG" \
               sftc-open-cli-*.tgz \
+              sftc-open-cli.tgz \
               sf-intra-city-skill.zip \
               checksums.txt \
               --title "$TAG" \
