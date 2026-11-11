@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"ls -la ~/.ssh/*.pub 2>/dev/null\\necho \\\"=== 公钥指纹 ===\\\"; for f in ~/.ssh/*.pub; do echo \\\"$f:\\\"; ssh-keygen -lf \\\"$f\\\" 2>/dev/null; done\\necho \\\"=== 测试 GitHub 连通 ===\\\"; ssh -o StrictHostKey...",
-  "error": "Exit code 1\n(eval):1: no matches found: /Users/sftc/.ssh/*.pub\n=== 公钥指纹 ===\n(eval):2: no matches found: /Users/sftc/.ssh/*.pub",
-  "timestamp": "2026-11-11T02:52:20.599Z",
-  "retry_count": 1
-}
